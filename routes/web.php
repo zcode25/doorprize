@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoorprizeController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\WinnerController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -13,6 +14,10 @@ Route::controller(EmployeeController::class)->group(function() {
     Route::post('/employee/import', 'import')->name('employee.import');
     Route::delete('/employee/delete', 'delete')->name('employee.delete');
     Route::post('/employee/reset', 'reset')->name('employee.reset');
+});
+
+Route::controller(WinnerController::class)->group(function() {
+    Route::get('/winner', 'index')->name('winner.index');
 });
 
 Route::controller(DoorprizeController::class)->group(function() {

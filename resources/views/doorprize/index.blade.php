@@ -3,55 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengacakan Nama Pemenang Doorprize</title>
+    <title>Doorprize</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            background-image: url('/img/bg.png'); /* Ganti dengan path gambar Anda */
+            background-size: cover; /* Menutupi seluruh area body */
+            background-position: center; /* Menjaga posisi tengah gambar */
+            background-repeat: no-repeat; /* Tidak mengulang gambar */
+            height: 100vh; /* Menyesuaikan tinggi body dengan viewport */
+            font-family: 'Poppins', sans-serif;
+        }
+
         #winner-name {
-            font-size: 3rem;
+            font-size: 70px;
             font-weight: bold;
-            color: #0d6efd;
+            color: #031447;
         }
         #winner-department {
             font-size: 1.5rem;
-            color: #6c757d;
+            color: #333333;
         }
-        /* #winner-id {
-            font-size: 1.25rem;
-            color: #d9534f;
-        } */
         #start-button {
             display: block;
+            font-size: 30px;
+            /* font-weight: bold; */
         }
         #congratulations-button {
             display: none;
+            font-size: 30px;
+            /* font-weight: bold; */
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 30px;
+            background-color: var(--color, #FF00FF);
+            top: 0;
+            animation: fall linear infinite;
+        }
+
+        .confetti:nth-child(2n) {
+            --color: #00FF00;
+        }
+
+        .confetti:nth-child(3n) {
+            --color: #FFFF00;
+        }
+
+        .confetti:nth-child(4n) {
+            --color: #FF0000;
+        }
+
+        .confetti:nth-child(5n) {
+            --color: #0000FF;
         }
     </style>
 </head>
 <body class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="text-center">
-        <h1 class="display-4 text-primary mb-5">Pengacakan Nama Pemenang Doorprize</h1>
-        <div id="winner-name" class="p-3 bg-white rounded-3 shadow-sm">Siapa yang Beruntung?</div>
-        <div id="winner-department" class="pb-4"></div>
-        {{-- <div id="winner-id" class="pb-4"></div> --}}
-        <button id="start-button" class="btn btn-success btn-lg">Mulai Pengacakan</button>
+        <div class="row mb-5">
+            <div class="col text-end">
+                <img src="/img/cdp.png" class="img-fluid" width="200px">
+            </div>
+            <div class="col text-start">
+                <img src="/img/aniv2.png" class="img-fluid" width="250px">
+            </div>
+        </div>
+        <h1 class="text-white mb-5" style="font-size: 80px">NAMA PEMENANG DOORPRIZE</h1>
+        <div class="bg-white rounded-3 shadow-sm p-3 mb-5">
+            <div id="winner-name" class="mb-1">Siapa yang Beruntung?</div>
+            <div id="winner-department" class="pb-4"></div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button id="start-button" class="btn btn-primary btn-lg px-5">Mulai Pengacakan</button>
+        </div>
 
-        <form action="/doorprize" method="POST" class="d-inline" id="congratulations-form">
-            @csrf
-            <input type="hidden" name="winner_id" id="winner-id-input">
-            <button type="submit" id="congratulations-button" class="btn btn-primary btn-lg mt-4">Selamat</button>
-        </form>
+        <div class="d-flex justify-content-center">
+            <form action="/doorprize" method="POST" id="congratulations-form">
+                @csrf
+                <input type="hidden" name="winner_id" id="winner-id-input">
+                <button type="submit" id="congratulations-button" class="btn btn-primary btn-lg px-5">Selamat Kepada Pemenang</button>
+            </form>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col text-white">
+                <p>Developed by</p>
+                <p class="fw-bold mb-1">Adam Zein</p>
+                <p>IT CDP</p>
+            </div>
+        </div>
     </div>
 
     <script>
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         // Data karyawan dikirim sebagai JSON ke JavaScript
-        const employees = @json($employees);
+        const employeesData = @json($employees);
+
+        // Acak urutan array karyawan
+        const employees = shuffleArray(employeesData);
 
         // Log data untuk memastikan data karyawan
-        // console.log('Employees Data:', employees);
+        console.log('Employees Data:', employees);
 
         const winnerNameElement = document.getElementById('winner-name');
         const winnerDepartmentElement = document.getElementById('winner-department');
-        // const winnerIdElement = document.getElementById('winner-id');
         const startButton = document.getElementById('start-button');
         const congratulationsButton = document.getElementById('congratulations-button');
         const winnerIdInput = document.getElementById('winner-id-input');
@@ -60,7 +135,7 @@
 
         startButton.addEventListener('click', () => {
             const interval = 100; // Kecepatan pengacakan tetap
-            const totalDuration = 10000; // Durasi total 30 detik
+            const totalDuration = 10000; // Durasi total 10 detik
             let elapsedTime = 0;
 
             // Sembunyikan tombol mulai pengacakan
@@ -71,11 +146,11 @@
                 const randomEmployee = employees[randomIndex];
 
                 // Debugging: Log untuk memeriksa objek karyawan yang dipilih
-                // console.log('Random Employee:', randomEmployee);
+                console.log('randomIndex:', randomIndex);
+                console.log('Random Employee:', randomEmployee);
 
                 winnerNameElement.textContent = randomEmployee.name;
                 winnerDepartmentElement.textContent = randomEmployee.department;
-                // winnerIdElement.textContent = `ID: ${randomEmployee.employeeId}`;
 
                 // Simpan ID karyawan yang ditampilkan
                 winnerId = randomEmployee.employeeId;
@@ -91,6 +166,14 @@
 
                     // Debugging: Tampilkan nilai input hidden di konsol
                     // console.log('Winner ID Input Value:', winnerIdInput.value);
+
+                    for (let i = 0; i < 100; i++) {
+                        let confetti = document.createElement("div");
+                        confetti.classList.add("confetti");
+                        confetti.style.left = Math.random() * 100 + "vw";
+                        confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+                        document.body.appendChild(confetti);
+                    }
                 }
             }, interval);
         });
