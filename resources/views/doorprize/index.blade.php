@@ -74,14 +74,17 @@
 <body class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="text-center">
         <div class="row mb-5">
-            <div class="col text-end">
+            <div class="col">
+                <h1 class="text-white fw-bold mb-5" style="font-size: 80px">Warga Kita</h1>
+            </div>
+            {{-- <div class="col text-end">
                 <img src="/img/cdp.png" class="img-fluid" width="200px">
             </div>
             <div class="col text-start">
                 <img src="/img/aniv2.png" class="img-fluid" width="250px">
-            </div>
+            </div> --}}
         </div>
-        <h1 class="text-white mb-5" style="font-size: 80px">NAMA PEMENANG DOORPRIZE</h1>
+        <h1 class="text-white mb-5" style="font-size: 80px">NAMA PEMENANG ARISAN</h1>
         <div class="bg-white rounded-3 shadow-sm p-3 mb-5">
             <div id="winner-name" class="mb-1">Siapa yang Beruntung?</div>
             <div id="winner-department" class="pb-4"></div>
